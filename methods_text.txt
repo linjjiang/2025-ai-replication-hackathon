@@ -1,0 +1,888 @@
+
+--- Page 4 ---
+Results
+We report results from 4 simulations (denoted experiments). In Experiment 1, we explore the
+ability of recurrent neural networks to recreate the data described in [10]. In Experiment 2, we
+study why and when the geometry emerges. In experiment 3, we adapt the retrocue paradigm
+to a new case with variable delay periods and explore how this affects the neural geometry in
+RNNs. Finally, in Experiment 4, we use tools from cognitive psychology to characterize the
+behaviour of neural networks in a variant of the paradigm in which cues have variable validity,
+as well as examine relationship between neural geometry and behaviour in the RNNs.
+Experiment 1
+We trained recurrent neural network models (RNNs, N = 30 models with different initialisa-
+tion and trial order) to perform a retro-cueing task comparable to that previously described in
+[10] (see Fig 1A and 1B). Each model was a vanilla RNN with a single recurrent layer, incorpo-
+rating rectified linear unit (ReLU) nonlinearities, and a single decoding layer (see Fig 1C for a
+schematic of the network architecture). Each trial was composed of four successive inputs.
+Firstly, networks received two concatenated circular normal inputs (corresponding to distrib-
+uted representations of the colour stimuli at two different locations, which we denote colour-
+L1, colour-L2), followed by seven cycles of delay (pre-cue delay). This was followed by a one-
+hot input (the retro-cue) denoting which of the two stimulus locations was relevant on the cur-
+rent trial and then finally, a second memory delay (post-cue delay). An example trial is shown
+in Fig 1B.
+The networks were trained using stochastic gradient descent to minimise the mean squared
+error (MSE) between their output and the stimulus colour shown at the cued location. Thus,
+we do not engineer the representations into the networks but allow them to form autono-
+mously during optimisation. To bound performance we added zero-mean Gaussian noise to
+the hidden activations of the models and trained until a plateau in the loss curve had been
+detected (see Methods). After approximately 220 ± 105 epochs the networks converged to a
+mean absolute angular error of 16.40 ± 0.94˚ (M±SEM). This was somewhat smaller than the
+value reported for monkeys (51.8˚). This discrepancy could be seen to reflect other sources of
+noise (e.g., motor error during saccadic responding) that are present in the animals but not in
+our models but is otherwise not consequential for our findings (increasing the noise added to
+network units precluded convergence).
+In Experiment 1, we first explored the representational geometry that related both cued and
+uncued items in the recurrent layer of the RNN, and compared it to that reported in macaque
+LPFC [10]. Noting a correspondence between the two, we then studied how this geometry
+emerged in the RNN over the course of learning, what connectivity patterns gave rise to it, and
+how it related to network behaviour, allowing us to form predictions for future studies.
+Representation of cued items. To study the geometry of the cued memory representa-
+tions formed in the pre-cue and post-cue delay periods, we focused on the “selection” task
+described in [10]. The geometry was computed by applying dimensionality reduction to the
+features (neural activity over units or neurons) × conditions (each item binned by colour and
+cue) matrix and plotting the reduced reconstruction in 3D. We begin by alerting the reader to
+two frames of reference for this analysis. Firstly, we can ask about the relationship between col-
+our-L1 and colour-L2 items when they are cued (Cued Geometry below) or uncued (Uncued
+Geometry below). Alternatively, we can ask about the relationship between the two items when
+one of them is cued and the other is not (Cued/Uncued Geometry).
+We focused first on the Cued Geometry. In monkey LPFC, in both the pre- and post-cue
+periods, the neural representations arranged themselves in two rings, representing similarity
+PLOS COMP UTATIONAL  BIOLOGY
+Control of working memo ry in a recurrent neural network
+PLOS Computationa l Biology | https:/ /doi.org/10.13 71/journal.p cbi.1011555 October 18, 2023 4 / 33
+
+--- Page 5 ---
+in the circular colour space for each of the two respective locations (L1 and L2; [10]). During
+the pre-cue delay, the angle between the two planes that lay parallel to the interior plane of
+each ring was close to 90˚. However, during the post-cue delay the two rings became aligned
+and phase matched, i.e., corresponding points in colour space were aligned on the two rings. A
+visualisation of this orthogonal-to-paralle l transformation from the paper is shown in Fig 2A.
+To study the memory representations created by the trained RNNs, we followed the same
+approach. We extracted hidden unit activity patterns corresponding to each trial type (defined
+Fig 2. The geometry of cued mnemonic representa tions learnt by the RNNs. A. Visualis ation of the pre- (left) and post-cue (right) geometry of cued items
+reported in [10]. Population response s from LPFC binned into 4 colour categories (denot ed by marker colour) for each stimulus location (upper, lower–
+denoted by marker shape). Data plotted in reduced dimensiona lity space, defined by the first 3 principal components (PCs) of the 8 location-c olour pairs.
+Planes of best fit for each location shown as grey quadrilaterals . B. Analogous visualisatio n of the hidden activity patterns from two example RNN models for
+the pre-cue (left) and post-cue (right) delay. Two locations (L1, L2) correspond to triangles and squares, respective ly. The percentage of total variance explained
+by each PC axis shown in square brackets. Chosen models (in this and subsequent figures) correspond to the ones with geometries qualitatively most and least
+similar to the group-level average (in this case, the average post-cue geometry). Note that the principal component s were calculate d separately for each delay
+(and model), thus the PC axes shown e.g. in the upper left (examp le model 1, pre-cue) panel are not the same as the ones shown in the upper right (examp le
+model 1, post-cue) panel. C.-D. Between-p lane angles θ for the pre- (red dots) and post-cue delay (navy triangles ) timepoint s, respective ly. Lighter and darker
+colours correspond to the values for individua l models and grand averages, respectively. E. Phase alignment angles ψ between the cued planes in the post-cue
+delay. F. Proportion of total variance explained (PVE) by the first 3 PCs for the PCA models fit to activation patterns from individua l networks . Values for
+individual models shown in lighter, and grand averages in darker colours. G. Subspace alignment index (AI) between location-s pecific planes during the pre-
+(red) and post-cue (navy) delay intervals. Individual models shown as points, bars correspond to the grand averages. AI reported for 2- and 3-dimen sional
+subspace s H. AI for the unrotated (light grey) and rotated (dark grey) subspace s–for descripti on, refer to the main text. Statistically significan t contrasts
+denoted by asterisks (*: p < .05, **: p < .01, ***: p < .001).
+https://do i.org/10.1371/j ournal.pc bi.1011555. g002
+PLOS COMP UTATIONAL  BIOLOGY
+Control of working memo ry in a recurrent neural network
+PLOS Computationa l Biology | https:/ /doi.org/10.13 71/journal.p cbi.1011555 October 18, 2023 5 / 33
+
+--- Page 6 ---
+by the unique colour-L1, colour-L2 and retro-cue combination) at the final timepoint of each
+delay period. For visualisation shown in Fig 2B, we binned the activation patterns correspond-
+ing to different stimulus colours into 4 equally spaced colour categories and collapsed the data
+across the uncued stimuli, resulting in a 200 x 8 (unit activity by conditions) matrix. Subse-
+quently, we performed principal components analysis (PCA) to project the data into a
+3-dimensional space.
+As reported in [10], we observed that the input representations were structured by their
+similarity, with the “colour” representations for each stimulus location largely confined to
+2-dimensional subspaces. Critically however, visual inspection suggested that the orientation
+of the location-specific planes in the 3-dimensional space differed between the two trial peri-
+ods in a very similar way to that seen in monkey LPFC. During the pre-cue delay, the location-
+specific planes were orthogonal to one another, whereas during the post-cue delay, the two
+planes had a roughly parallel configuration. Moreover, the corresponding colour category rep-
+resentations were also phase-aligned, potentially permitting a common readout mechanism
+(see Fig 2B). To directly test this hypothesis, we trained linear classifiers to discriminate
+between cued colours on trials where location 1 was cued and tested their cross-generalisation
+performance on trials where location 2 was cued, and vice versa. The results of this analysis
+confirmed that a single linear readout could be used for both Cued colour planes and are
+reported in a supplementary note (S1 Note).
+To quantify the described geometry, we reduced the data to three dimensions for each net-
+work, estimated best-fitting planes for the datapoints corresponding to each cued location and
+calculated the angle θ between them in this low-rank space. Across all trained models, θ was
+clustered at the +90˚ and -90˚ marks in the pre-cue delay (Fig 2C). To test for the statistical
+significance of this effect, we rectified the data and performed a v-test with a hypothesised
+angular mean of +90˚ (see Methods for more details). This returned a significant result (v(29)
+= 22.18, p < .001), confirming that the pre-cue planes were indeed orthogonal. In contrast, in
+the post-cue delay, θ was significantly clustered around 0˚ (circular mean = 5.66˚; v-test results:
+v(29) = 24.09, p < .001, see also Fig 2D). The mean absolute difference between pre- and post-
+cue θ was also significantly different from 0˚ (one-sample test for mean angle, M = 93.2˚, 95%
+CI = 69.66˚, 116.74˚).
+In ref [10], the authors report that the planes were phase aligned during the post-cue period.
+To quantify the phase alignment between the L1 and L2 datapoints in the RNN, we projected
+them onto their respective planes before rotating the planes to be coplanar. The phase align-
+ment angle ψ was then obtained from a rotation matrix that most closely mapped L1 data-
+points onto L2 datapoints. Importantly, ψ was only defined for geometries that could not be
+classified as either mirror reflections or bowtie shapes. Given that the pre-cue planes were sig-
+nificantly orthogonal, we only report ψ for the post-cue delay, where it was defined for all
+models and significantly clustered around 0˚ (circular mean = 1.67˚, v-test results: z(29) =
+29.57, p < .001, N = 30). Thus, our results indicate that in the RNN, like in the monkeys, the
+post-cue planes were both parallel and phase-aligned.
+We confirmed the above results with an analogous analysis using the subspace alignment
+index (AI) introduced in [20] (see also Methods). This method projects the data from condi-
+tion i into the subspace of condition j and calculates the amount of variance of i explained by
+the subspace of j. The AI metric takes values between 0 and 1, which correspond respectively
+to fully orthogonal and fully aligned subspaces. We calculated the AI for 2 and 3 dimensional
+subspaces and found that in both cases, the mean pre-cue AI was low (AI = 0.26 and 0.3, for 2
+and 3 dimensions, respectively), indicating nearly orthogonal subspaces for the two locations.
+In contrast, the mean post-cue AI was significantly higher (more parallel) in both target
+dimensionalities (2D: AI = 0.63, paired t-test: t(29) = 6.13, p < .001, one-tailed, Cohen’s
+PLOS COMP UTATIONAL  BIOLOGY
+Control of working memo ry in a recurrent neural network
+PLOS Computationa l Biology | https:/ /doi.org/10.13 71/journal.p cbi.1011555 October 18, 2023 6 / 33
+
+--- Page 7 ---
+d = 1.12; 3D: AI = 0.64; t(29) = 5.98, p < .001, one-tailed, Cohen’s d = 1.09), indicating a signif-
+icant increase in subspace alignment across the two delays (see also Fig 2G).
+Lastly, we investigated how a given colour ring was oriented with respect to itself before
+and after the presentation of the retro-cue. This allowed us to study the nature of the transfor-
+mation that the network had learned to perform. To parallelise the subspaces, the networks
+could either learn to rotate both pre-cue subspaces, or to rotate only one, keeping the other
+static. To establish which solution was utilised by the models, we performed the AI analysis in
+2-fold cross-validation. This was necessary because the frame of reference of location (e.g., left
+vs. right side) is arbitrary, and so if different networks learned to rotate left or right stimuli,
+averaging the data would obscure the results. Thus, we used half of the data to identify the
+unrotated and rotated locations (based on their AI values), and the other half to confirm
+whether there was a significant difference between them. We observed that the mean AI for
+the unrotated location (AI = 0.60 and 0.61 for 2 and 3D, respectively) was significantly higher
+than for the rotated location (2D: AI = 0.28, Wilcoxon signed-rank test W(29) = 462, p < .001,
+matched rank biserial correlation = 0.987; 3D: AI = 0.32; W(29) = 465, p < .001, matched rank
+biserial correlation = 1.0; see Fig 2H) and comparable to the AI for the post-cue subspaces
+(Fig 2G). We obtained similar results when we computed rotation of the between-plane angles
+using a similar cross-validated approach (S1D Fig). Together, these results imply that by con-
+vergence, the networks had learnt to rotate only one of the pre-cue subspaces, keeping the
+other in its pre-cue orientation. These findings diverge from the observations made in monkey
+LPFC, where the different task periods were associated with independent subspaces.
+Representation of uncued items–Uncued Geometry. The RNN thus seems to capture the
+cued stimulus representations seen in macaque prefrontal cortex. Next, we turned to investi-
+gate the Uncued Geometry, that is the relationship between items colour-L1 and colour-L2
+when they were not signalled by the retrocue. First, we asked whether the RNNs retained any
+information at all about the uncued item in the post-cue period. In monkey LPFC, there was
+significant colour information about both memory items (quantified as the circular entropy of
+each neuron’s response to colour) in all trial periods [10]. This was the case even though the
+monkeys were never probed on the uncued memory item and could have, in theory, discarded
+it after the cue presentation. We found the same to be true in the RNNs. For all networks, lin-
+ear decoders trained to perform pair-wise colour discriminations of the uncued items in the
+post-cue delay showed significantly above-chance mean performance when tested on held out
+data (M = 98.16% decoding accuracy, Wilcoxon signed-rank test, W(29) = 465, p < .001;
+matched rank biserial correlation = 1.0).
+We then set to find out if the uncued memory items also underwent a transformation from
+a feature-based representation to a more response-oriented format. In monkey LPFC, the
+uncued subspaces became slightly, but non-significantly, more parallel in the post-cue delay.
+Moreover, the two subspaces, unlike their cued counterparts, were not phase-aligned [10]
+(Fig 3A). To visualise and quantify the geometry of these representations across our models,
+we followed the same steps as described above (in the section subtitled representation of cued
+items), except the data were averaged across uncued rather than cued locations (the configura-
+tion in the post-cue delay shown in Fig 3B). For each delay period, we calculated and com-
+pared the two location subspaces using the AI (Fig 3D). The mean AI in the post-cue delay
+was marginally higher than in the pre-cue delay (2D: pre-cue AI = 0.26, post-cue AI = 0.32,
+paired t-test: t(29) = 1.36, p = .092, one-tailed, Cohen’s d = 0.25; 3D: pre-cue AI = 0.30, post-
+cue AI = 0.37, paired t-test: t(29) = 1.77, p = .043, one-tailed, Cohen’s d = 0.32). It was also,
+however, significantly lower than the post-cue index for the cued subspaces (paired t-test: 2D:
+t(29) = -6.74, p < .001, Cohen’s d = 1.23; 3D: t(29) = -5.84, p < .001, Cohen’s d = 1.07). A com-
+plementary analysis of the angles formed by the two planes in the post-cue delay revealed that
+PLOS COMP UTATIONAL  BIOLOGY
+Control of working memo ry in a recurrent neural network
+PLOS Computationa l Biology | https:/ /doi.org/10.13 71/journal.p cbi.1011555 October 18, 2023 7 / 33
+
+--- Page 8 ---
+Fig 3. The geometr y of the uncued item representa tions. A. Visualisation of the pre- (left) and post-cue (right) geometry of the
+uncued memory items report ed in [10]. Populati on activity patterns from macaque LPFC were averaged across the cued items and
+binned into 4 uncued colour categorie s (denoted by marker colours). Data from each delay period was plotted in reduced
+dimensional ity space, degined by the first 3 PCs of the 8 location-col our pairs. Planes of best fit for each location shown as grey
+quadrilateral s. All conventions as described in Fig 2A. B. Hidden activity patterns for the uncued items, from two example models
+visualised in a 3-dimen sional space. All conventions as in Fig 2B. C. Between-p lane angles (θ, left) and phase alignment angles (ψ,
+right) between the two uncued colour planes in the post-cue delay. Individual models and populati on mean shown as transpar ent
+and opaque markers, respectively. D. Alignment index for the uncued subspace s in the pre- and post-cue delays. Note that prior to
+the presentation of the retro-cue, the coding format is location based. Theref ore, the pre-cue data is the same as shown in Fig 2E. E.
+Visualisat ion of the cued and uncued memory items on trials where the upper location was cued reported in [10]. Population
+activity patterns from macaque LPFC were averaged across the uncued items to calculate the cued item representat ions, and across
+cued items for the uncued representat ions, prior to binning into 4 colour categories each. Data from each delay plotted in the
+reduced dimensional ity space, correspond ing to the first 3PCs. F. Visualis ation of the hidden activity patterns for cued and uncued
+PLOS COMP UTATIONAL  BIOLOGY
+Control of working memo ry in a recurrent neural network
+PLOS Computationa l Biology | https:/ /doi.org/10.13 71/journal.p cbi.1011555 October 18, 2023 8 / 33
+
+--- Page 9 ---
+their orientation did not show any consistent trend across trained models (see Fig 3C, left).
+This was confirmed by the results of a Rayleigh test which failed to reject the null hypothesis of
+a uniform distribution of plane angles around the unit circle (z(29) = 0.06, p = .941). Similarly,
+there was no significant phase alignment between the uncued planes (v-test results: v(15) =
+1.81, p = .261, N = 16), and nearly 50% of the models developed geometries where the two
+planes were either mirror reflections of one another, or one of the geometries was twisted into
+a bowtie (non-planar) shape. Taken all together, these findings show that the two uncued sub-
+spaces are generally not transformed into a common frame of reference post-cue and their pre-
+cise arrangement is variable between the trained models. Whilst one might be tempted to
+propose that the Uncued geometry is irrelevant for the choice, we shall see below that (perhaps
+surprisingly) it is reliably predictive of behaviour (see Experiment 3 below).
+Representation of uncued items–Cued/Uncued Geometry. To successfully perform the
+task, the networks need to be able to prevent cross-interference between the two memory
+items (cued and uncued) across the entire trial duration, including the post-cue delay. In our
+next analysis, thus, we focussed on the relationship between cued and uncued items. We call
+this Cued/Uncued Geometry and note that this is different from analysing the relationship
+between each item (say, colour-L1) on those trials where it was cued relative to those where it is
+uncued. Instead, here we examine the relationship between colour-L1 and colour-L2 in the
+frame of reference of the cue.
+It seems a priori plausible that, in order to minimise interference, the cued and uncued
+items are orthogonalized, as was observed in monkeys (Fig 3E). To test this prediction in our
+models, we calculated the angles between the cued and uncued subspaces and averaged them
+across the two trial types (defined by the location of the retrocue). In line with our expectation,
+we found that the distribution of angles across the trained networks was significantly clustered
+around 90 degrees (though with some variability across individual models, v-test: v(29) =
+10.31, p < .01; Fig 3G, left). In agreement, average AI values between the cued and uncued
+subspaces were low (2D: M = 0.32, SEM = 0.03; 3D: M = 0.37, SEM = 0.03; Fig 3G, right) and
+comparable to the values reported for the Cued planes in the pre-cue delay (cf. Fig 2G, red
+bars).
+Furthermore, as was reported for monkey LPFC, the visualisation of the geometry in Fig 3F
+suggested that the uncued colour representations were much more compressed (i.e., less dis-
+criminable) in the representational space than their cued counterparts. To quantify this effect,
+we calculated the area of the polygons formed by the datapoints in the 3D space and compared
+this colour discriminability index (CDI) across conditions with contrasts based on the results
+reported for monkey LPFC [10]. We found that the mean colour discriminability in the post-
+cue delay was significantly higher for cued (CDI = 1294.1, arbitrary units) than uncued items
+(CDI = 45.46 Wilcoxon signed-rank test: W(29) = 465, p < .001, one-tailed, matched rank
+biserial correlation = 1.0; see also Fig 3H). Next, we tested the cued and uncued CDI against
+the pre-cue baseline. In accordance with previous reports from monkey LPFC [10] and human
+neuroimaging work [21,22], the cued CDI was significantly greater than the pre-cue baseline
+(CDI = 17.3; Wilcoxon signed-rank test: W(29) = 465, p < .001, one-tailed, matched rank
+items in the post-cue delay, on trials where L1 was cued. Data from two example models. Note the plane for L2 is severely
+compressed and thus hard to see. G. Left: Angles θ (rectifie d) between cued and uncued planes in the post-cue delay, averaged
+across the two retro-cue locations. Values for individual models shown in grey, average across networks in black. Right:
+Compleme ntary AI values between the cued and uncued subspace s, averaged across the two retro-cue locations. AI calculate d for
+2- and 3-dimen sional subspace s. Black circles correspond to values for individual models, grey bars denote the means across all
+networks. H. Colour discriminab ility index (CDI) for the pre-cue subspace s (averag ed across both locations, black circles) and cued
+and uncued subspace s in the post-cue delay (blue triangles and green crosses, respectively).
+https://doi. org/10.1371/j ournal.pcb i.1011555.g 003
+PLOS COMP UTATIONAL  BIOLOGY
+Control of working memo ry in a recurrent neural network
+PLOS Computationa l Biology | https:/ /doi.org/10.13 71/journal.p cbi.1011555 October 18, 2023 9 / 33
+
+--- Page 10 ---
+biserial correlation = 1.0). For the uncued item, our hypothesis stated that there would be no
+significant increase from the baseline, as was reported in [10]. To test it, we performed a Bayes-
+ian non-parametric t-test. This returned a BF
+01
+of 0.73, indicating anecdotal evidence for the
+alternative hypothesis of a difference in medians. For comparison, a two-tailed Wilcoxon
+signed-rank test was not significant (W(29) = 149, p = .085, matched rank biserial correlation
+= -0.36). These results suggest that to prevent interference between the cued and uncued
+items, the RNNs both increase the representational discriminability of the former, as well as
+orthogonalize the two items at the end of the post-cue delay.
+Learning dynamics and connectivity. Thus far, we have characterised the representa-
+tional geometry formed by the RNNs and compared it to that observed in monkey LPFC.
+Next, we exploited the learning dynamics of the RNN to ask how the observed geometry
+emerged over the course of training.
+Neural networks showed stereotypical learning dynamics characterised by a pronounced
+plateau period at approximately half of the initial loss value, buttressed by steeper declines
+both early and late (see Fig 4A for an example). We therefore decided to track the representa-
+tional changes in the networks at three timepoints–at initialisation (untrained), the mid-learn-
+ing plateau (plateau) and after convergence (trained). The timepoint used as the mid-training
+plateau was designated as the first local minimum in the derivative of the training loss with
+respect to time (for more details, refer to Methods and S1 Fig). We quantified the Cued Geome-
+try across the different training stages by calculating the angle θ and the AI at the end points of
+the memory delays. The results of this analysis are shown in Fig 4C. Untrained networks prop-
+agated the orthogonal inputs throughout the pre-cue delay without changing their relative
+arrangement, as evidenced by an AI value of approximately 0 (Fig 4C, top right) and θ cluster-
+ing around ±90˚. This is expected, given that inputs to the network are orthogonal. After the
+presentation of the retrocue, both the AI and θ remained close to their pre-cue values. By the
+mid-training plateau, the networks had learnt to parallelise the two planes in the post-cue
+delay. Interestingly, however, this coding format also extended into the pre-cue delay, as evi-
+denced by an AI value of close to 1 and θ clustering around 0˚. As described in the previous
+section (Representation of cued items), the trained networks settled on an orthogonal plane
+configuration in the pre-cue delay, which was transformed into a parallel arrangement after
+the presentation of the retrocue. Thus, the network first learned to parallelise the inputs
+entirely, before gradually learning to keep them separate before the retrocue appeared.
+Next, we asked how the retro-cue triggered the representational changes observed in the
+recurrent layer. To address this, we analysed the connectivity patterns that were acquired over
+the course of training between the retrocue input units and the recurrent nodes. For each
+model, we calculated the correlation between the weights from each cue unit and the recurrent
+units (weights from an example model shown in Fig 4B). Consistent with other recent obser-
+vations, we found that the models learnt opposing weight patterns for the two retro-cue inputs
+[12,23]. More specifically, the recurrent units that had positive connections weights with the
+first retro-cue unit had negative connection weights linking them with the other cue unit, and
+vice versa. Across all neural networks, this manifested as a significantly negative correlation
+coefficient (one sample t-test: t(29) = -68.17, p < .001, Cohen’s d = -12.45). This negative cor-
+relation, in combination with the ReLU nonlinearities, ensures that hidden units that have
+inputs from one context units have none from the other and vice versa; this effectively creates
+two subpopulations of units which code for the context provided by the two retrocues.
+Lastly, we investigated the relationship between the representational geometry observed in
+trained networks and their behavioural timecourse. To this end, we asked whether the orienta-
+tion of the Cued, Uncued and Cued/Uncued subspaces (as quantified with the AI metric) was
+predictive of the training latency (time to convergence; see Methods) across all trained
+PLOS COMP UTATIONAL  BIOLOGY
+Control of working memo ry in a recurrent neural network
+PLOS Computationa l Biology | https:/ /doi.org/10.13 71/journal.p cbi.1011555 October 18, 2023 10 / 33
+
+--- Page 11 ---
+Fig 4. Learnin g dynamics. A. Training loss of an example RNN model plotted against training epochs. The three dots correspond to the
+timepoints chosen for the subsequent analysis: untrained (orange), plateau (magenta) and trained (purple) stages, respectively. B. Scatterplot of the
+weights between the two retro-cue input units and recurrent units for an example model. C. Comparison of the plane angles θ and AI between the
+cued planes across different training stages for the pre- (top row) and post-cue (bottom row) delays. Left: Plane angles at the untrained (orange),
+plateau (magenta) and trained (purple) stages. Values for individual models show in transparent colours, circular mean in opaque. Right: AI at the
+same training stages. Mean across models depicted as bars with individua l datapoin ts overlaid. D. Partial plots showing the log of training epochs
+(y-axis) versus the three representat ional geometry metrics used as regression predicto rs (left to right: AI Cued, AI Cued/Uncued and AI Uncued).
+Values for individual networks shown as grey dots, regression lines of best fit in red alongside the 95% slope confidence intervals in navy dashed
+lines.
+https://doi.o rg/10.1371/j ournal.pcb i.1011555.g 004
+PLOS COMP UTATIONAL  BIOLOGY
+Control of working memo ry in a recurrent neural network
+PLOS Computationa l Biology | https:/ /doi.org/10.13 71/journal.p cbi.1011555 October 18, 2023 11 / 33
+
+--- Page 12 ---
+networks. To increase the power of this analysis (which unlike other analyses described here
+relies on correlations over the network population) we trained N = 100 models until the train-
+ing loss fell below a common threshold value (see Methods). We then regressed the three AI
+values against the total number of training epochs. The regression model explained a signifi-
+cant proportion of the variance in training latency (R
+2
+= .28, F(3,96) = 12.29, p < .001). Out of
+the three predictor variables, to our surprise only the Uncued Geometry showed a significant
+and positive relationship with the number of training epochs (ß = 0.91, t(96) = 4.48, p < .001).
+This means that the more parallel the Uncued geometry in the post-cue period, the longer the
+network took to train. By contrast, the AI between the (i) Cued subspaces and (ii) Cued/
+Uncued subspaces did not contribute significantly to the model (Cued: ß = -0.125, t(96) =
+-0.374, p = .374; Cued/Uncued: ß = 0.17, t(96) = 0.878, p = .382). We were not expecting this
+result; which is further discussed below.
+Experiment 2: Parallel geometry for more robust maintenance
+Thus far, we have observed that RNNs trained on the retro-cueing task learned to transform
+the cued item information into a common frame of reference after the retrocue. Whilst this
+representational format affords the re-use of a common readout mechanism across all trials
+(i.e., irrespective of the retro-cue identity), it is not the only solution to the task. In fact, we
+observed that in other variants of the task, where the network first receives a probabilistic ret-
+rocue input and a deterministic probe (this paradigm is explored in Experiment 4), networks
+trained with no post-probe delay did not develop this geometry, and instead maintained the
+cued item information in orthogonal planes throughout the entire trial. Given this observation,
+we reasoned that the parallel plane format might be beneficial when there is a pressure to
+maintain the cued information in memory after the retro-cue [9]. To test this hypothesis, we
+trained models (as before, N = 30 per task variant) on variants of the original task from Experi-
+ment 1 (with a deterministic retro-cue and no probe), except that now we parametrically var-
+ied the length of the post-cue delay interval, whilst holding the overall trial length constant (see
+Fig 5A). We then calculated the AI between the cued subspaces prior to and post retro-cue
+presentation and compared them between the different task variants (Fig 5B, red dots and
+line). We found that, in agreement with our previous results, all models maintained the cued
+Fig 5. Comparison of cued item geometr y across networks trained under various post-cu e maintenanc e pressur e conditions . A. Example trials for a subset
+of the parame tric family of retro-cueing tasks used. Overall trial length was constant, and the ratio between pre- and post-cue delay lengths was varied.
+Conventi ons as in Fig 1B. B. Comparison of cued subspace AI during the pre- (red circles) and post-cue (blue triangles) intervals between networks trained
+with different post-cue delay lengths. Asterisks denote the significance levels of the contrasts described in the main text: ***: p < .001, **: p < .01, ns: p > = .05.
+https://do i.org/10.1371/j ournal.pc bi.1011555. g005
+PLOS COMP UTATIONAL  BIOLOGY
+Control of working memo ry in a recurrent neural network
+PLOS Computationa l Biology | https:/ /doi.org/10.13 71/journal.p cbi.1011555 October 18, 2023 12 / 33
+
+--- Page 13 ---
+item information in orthogonal subspaces before the retro-cue presentation, regardless of the
+task timings.
+However, only models trained with longer post-cue delay lengths underwent the previously
+noted transition into a parallel subspace format prior to producing a response, whilst networks
+trained with shorter delays learnt to read-out cued colour information from the low-dimen-
+sional orthogonal subspaces (Fig 5B, blue dots and line). To test the statistical significance of
+this finding, we compared the pre- to post-cue difference in AI with a Kruskal-Wallis test,
+which showed a significant difference in this metric across the different post-cue delay length
+conditions (H(7) = 199.7, p < .001). We then followed up with custom contrasts comparing
+the pre- and post-cue AI at each level of the post-cue delay length factor. This revealed no sig-
+nificant differences with delay lengths below 3 cycles (t(232) = 0.27, p = .789; t(232) = -1.16, p
+= .249; t(232) = -.61, p = .546, in increasing order) and a significantly higher post-cue AI other-
+wise (t(232) = 5.04, p < .001; t(232) = 14.53, p < .001; t(232) = 24.3, p < .001, t(232) = 29.52, p
+< .001, t(232) = 33.36, p < .001, in increasing order). Note that the degrees of freedom here
+are computed from the ANOVA (8 conditions x 30 models = 240 datapoints, see methods).
+Interestingly, we also observed that the training time required for convergence differed
+between networks trained on variants of the task. More specifically, time to convergence
+declined linearly for models trained with increasing lengths of the post-cue delay (see S2 Note
+and S2 Fig). These results suggest that networks using the orthogonal plane solution (i.e.,
+those trained with short post-cue delay lengths) need to complete the most training iterations
+to converge, as compared to the networks using the parallel plane solution (trained with long
+post-cue delays).
+Experiment 3: Exploring the effects of variable delay periods
+In the simulations described thus far, we trained networks with a fixed number of delay cycles.
+In biological systems, maintenance processes can be successful even where the delay period
+length is unknown, and these conditions typically give rise to the formation of more stable
+dynamics (e.g. attractor states) in RNNs [24] and mice [25]. We thus asked whether (i) the net-
+works could perform the task under novel delay period lengths and (ii) whether the represen-
+tations they formed were dynamic or stable in nature, as well as how these aspects depended
+on whether the delay period during training was of variable or fixed duration. Lastly, (iii) we
+examined whether the geometry of cued item representations differed depending on the type
+of memory maintenance mechanism used by the network.
+We sampled delay period durations randomly during training and test, so that networks
+could not learn to anticipate the precise delay length on any given trial. In this setting, we
+tested performance under three different conditions: a delay length previously experienced
+during training, as well as novel in- and out-of-training-rang e lengths. We found that net-
+works trained with a fixed delay length could not perform the task with novel delay lengths–
+their performance, as measured by the mean absolute angular error rose from 16.37±0.94˚ (M
+±SEM) to 87.06±2.82˚ and 81.30±5.74˚ when evaluated on the 3 datasets, respectively (see also
+S3A Fig). In contrast, task performance in models trained with variable delay durations
+seemed to be less affected by the precise task timings (M±SEM = 7.72±0.22˚, 36.46±1.94˚ and
+18.60±2.01˚, respectively; note that perhaps surprisingly generalisation was better to novel
+examples outside than inside the training set). Note the overall performance difference
+between the fixed and variable delay networks is due to a combination of different noise levels
+and training stop procedures used (for more details, refer to the Methods section).
+Next, we studied the maintenance mechanisms learned by the networks trained with fixed
+and variable delay periods, using a cross-temporal generalisation approach. We trained LDA
+PLOS COMP UTATIONAL  BIOLOGY
+Control of working memo ry in a recurrent neural network
+PLOS Computationa l Biology | https:/ /doi.org/10.13 71/journal.p cbi.1011555 October 18, 2023 13 / 33
+
+--- Page 14 ---
+classifiers to discriminate between colour pairs using hidden activity patterns from a single
+timepoint and tested their performance on all the other trial timepoints (Fig 6A shows the
+cross-temporal generalisation scores averaged across models). We observed that neural net-
+works trained with variable- and fixed-length delay periods both tended to maintain informa-
+tion across the memory delays using a temporally stable code. Accordingly, the mean off-
+diagonal delay cross-temporal generalisation scores were significantly higher than chance (0.5)
+in both groups (variable-length delay group: M = 0.62, one-sample t-test results: t(29) = 28.88,
+p < .001, Cohen’s d = 5.27; fixed-length delay group: M = 0.59, one-sample t-test results on
+log-transformed data: t(29) = 4.37, p < .001, Cohen’s d = 0.80). However, as previously
+reported [24], the temporal stability of the delay-period code, as indexed by the ratio between
+the off- and on-diagonal delay decoding scores, was higher in the variable- than fixed-length
+delay group (M = 0.61 and 0.59, respectively) although this was only barely significant (inde-
+pendent sample t-test on log-transformed data: t(58) = 1.74, p = .044, one-tailed, Cohen’s
+d = 0.32).
+Fig 6. Maintenance mechanisms . A. Cross-temp oral generali sation scores for decoders trained to discriminate between colour pairs. Data has been averaged
+across all trained networks . Black lines indicate the junction s between task events–st imulus presentation, pre-cue delay, retro-cue, and post-cue delay. Left:
+Average scores for models trained with a fixed-length delay interval. Right: analogous plot for models trained with variable delay lengths. Note that the
+networks show a stable (cross-general isable) memory code between the 10 and 16 cycle mark, which covers the range of temporal variabil ity experienced
+during training (with the post-cue delay starting at the 10 cycle mark and lasting until between the 11 and 18 cycle marks). B. Boxplots showing the distribution
+of mean cross-temp oral decoding accuracy scores, averaged across the two memory delays, for all models. Variable delay interval length condition shown on
+the left in green, fixed delay length condition on the right in sand. Asterisks denote the results of the one-sided one-samp le t-tests against the chance (50%)
+decoding level, *** correspond s to p < .001. C.-D. Plane angles θ between the cued subspace s in the pre- and post-cue delay periods, respective ly. E. Phase
+alignment angles ψ between the cued subspaces in the post-cue delay.
+https://do i.org/10.1371/j ournal.pc bi.1011555. g006
+PLOS COMP UTATIONAL  BIOLOGY
+Control of working memo ry in a recurrent neural network
+PLOS Computationa l Biology | https:/ /doi.org/10.13 71/journal.p cbi.1011555 October 18, 2023 14 / 33
+
+--- Page 21 ---
+transformation when the relationship between the retrocue and the trial-relevant item was
+deterministic (but not when it was probabilistic, see Expt. 4). Building on this representational
+correspondence, we then characterised how and why the described geometry emerged, in
+addition to revealing its mechanistic basis, thus providing testable predictions for future
+neurobiological studies.
+At first glance, the orthogonal geometry in the pre-cue delay might seem a trivial finding,
+given that the information about the two stimuli is supplied to the RNN via independent (and
+uncorrelated) input channels. Accordingly, this geometry is present even in naïve networks
+(Fig 4C). However, during the pre-cue delay, over the course of training the networks first
+learn to arrange both mnemonic representations into parallel neural subspaces before con-
+verging back onto the orthogonal geometry. This coding format seems well suited to satisfy the
+computational demand of the task in the pre-cue delay–namely, the minimalization of inter-
+ference between multiple memory items. This interpretation also fits well with other findings
+from the literature. For example, a recent sequential working memory study reported that
+information about individual stimuli from a sequence was also maintained in orthogonal neu-
+ral subspaces in macaque LPFC [15]. Similar observations have also been made in other brain
+regions, species and task [12,13,27] as well as in neural networks [23,27,28], suggesting that
+factorising representations into orthogonal subspaces to prevent cross-interference is a general
+coding principle shared by both biological and artificial networks.
+Interestingly, in parallel to the monkey results from [10], the RNNs seem to use two mecha-
+nisms for preventing interference between the cued and uncued items in the post-cue delay.
+Firstly, we found evidence for the modulation of the discriminability of the cued and uncued
+stimuli. In the representational geometry framework, this corresponds to the overall size of the
+colour rings. In agreement with previous reports from both macaque [10] and human research
+[21,22], we found evidence for an increase in colour discriminabillity for the cued item. Sec-
+ondly, we found the angles between the cued and uncued planes to be centered around 90
+degrees, suggesting that the Cued and Uncued item representations are orthogonalised. The
+same observation was made in macaque LPFC [10].
+In the post-cue delay interval, the representations of cued memory items were arranged
+into parallel subspaces in both the monkey LPFC [10] and the RNN. This geometry abstracts
+over the now-irrelevant stimulus location and aligns the colour representations into a common
+template space. Consequently, the same downstream readout mechanism can be used to gen-
+erate a response, regardless of the retrocue identity. Interestingly, the authors in [10] also
+report the same neural geometry in a related task where the cue is provided prior to the stimu-
+lus presentation, at the onset of the trial. Whilst we did not model this task variant, we predict
+that the neural geometry developed by the RNNs under such conditions would similarly
+match. This prediction is based on observations of parallel low-dimensional manifolds in
+other tasks incorporating a response generalisation element, which have been made in both
+biological and artificial networks [16–19]. Such findings collectively imply that the parallel
+geometry might too be a general coding principle, its function being to facilitate the generalisa-
+tion of knowledge across different behavioural contexts.
+Nor does it seem like the parallel plane geometry in the post-cue delay is a trivial conse-
+quence of the way we set up the task. In Experiment 2 we show that this geometry only
+emerges when the cued information must be maintained in memory for several cycles prior to
+the response. In contrast, when there is only a short post-cue delay, the RNNs continue to
+maintain the cued information in the orthogonal format adopted in the pre-cue delay period.
+Thus, our results suggest that the parallel geometry might additionally confer a robustness to
+working memory maintenance, providing a normative explanation for its emergence in the
+context of the retro-cueing task, as well as a testable prediction for future neurobiological
+PLOS COMP UTATIONAL  BIOLOGY
+Control of working memo ry in a recurrent neural network
+PLOS Computationa l Biology | https:/ /doi.org/10.13 71/journal.p cbi.1011555 October 18, 2023 21 / 33
+
+--- Page 22 ---
+studies. We note that these speculations, based on our simulations, could be confirmed with
+exact analysis of neural network dynamics (where these become available).
+One notable difference between our results and those reported in [10] pertains to the nature
+of the Cued item transformation that converts the orthogonal pre-cue geometry into parallel
+post-cue planes. In macaque LPFC [10], the pre- and post-cue neural subspaces were indepen-
+dent of one another (i.e., the post-cue subspace lied in the null space of the pre-cue subspace,
+and vice-versa). The authors proposed that the associated transformation might therefore have
+a role in output gating, whereby only the information expressed in the post-cue neural sub-
+space is directly accessible to the downstream readout circuit (i.e., lies in its the target space).
+In contrast, following the retrocue input, only one of the cued memory representations was
+rotated in the RNNs to form the parallel plane geometry. Thus, the pre-cue and post-cue sub-
+spaces were not independent. This difference might stem from the fact that the network output
+was constrained only at the last timepoint of the trial. Consequently, not transforming the
+other memory item would not have had a detrimental impact on network performance (such
+as causing it to respond prematurely).
+Whilst the Cued and Cued/Uncued geometries are interpretable with respect to the task
+demands as outlined above, this is not the case for the Uncued geometry. We found the Uncued
+geometry to be variable between the different network replicants. Surprisingly however, this
+geometry was also highly predictive of network behaviour–in both Experiments 1 and 4, it
+proved to be a reliable predictor of the training latency. This relationship was negative, indicat-
+ing that to reach the same level of performance, models that relied on a more parallel Uncued
+geometry needed to complete more training iterations than those that orthogonalised the
+uncued item subspaces. We interpret this result to be a consequence of using random network
+initialisation, which would predispose some networks to a more parallel Uncued geometry
+even before training commenced. If the uncued planes happened to be aligned with the read-
+out subspace in a network, it would be more prone to responding based on the uncued item
+and thus need more training iterations to overcome this response bias. It is unclear whether
+this geometry bore any relationship to behaviour of the monkeys reported in [10]. Interest-
+ingly however, the authors reported a negative correlation between the degree of the Cued
+plane alignment and the magnitude of behavioural error. In agreement with their report, we
+found it to be positively predictive of the training latency in Experiment 3, signifying a perfor-
+mance advantage in networks characterised by a more parallel geometry. However, this effect
+was not detectable in Experiment 1. We are thus not entirely convinced by this explanation.
+The similar representational geometry with the macaque suggests that the LPFC might use
+a similar computational principle to solve the retro-cueing task. Thus, in later experiments we
+capitalised on the inherent accessibility of the RNN model and extended our analyses to two
+aspects not explored in [10]–the (i) emergence and (ii) mechanistic basis of the reported repre-
+sentational geometry. As artificial neural network models are not endowed with representa-
+tional schemes by hand and instead develop them through training, they offer a normative
+account of how representational properties can be acquired through learning in biological
+brains. To this end, we provide a description of the stereotypical representational geometries
+the RNNs develop at different stages of training. The existence of such learning transitions can
+be verified in vivo in future studies, to ascertain whether biological learning follows similar
+principles to the learning algorithms used for training RNNs.
+Our final contribution lies in the exploration of a related paradigm often used in beha-
+vioural experiments, whereby the relationship between the retrocue and the trial-relevant item
+is probabilistic. In Experiment 4, we recreated the key behavioural results characteristic of
+human participants performing the task. We found that, under conditions where the cue was
+on average valid (75% validity paradigm), recall performance was improved on trials where
+PLOS COMP UTATIONAL  BIOLOGY
+Control of working memo ry in a recurrent neural network
+PLOS Computationa l Biology | https:/ /doi.org/10.13 71/journal.p cbi.1011555 October 18, 2023 22 / 33
+
+--- Page 23 ---
+the retrocue correctly pointed to the to-be-probed item and degraded otherwise, relative to the
+corresponding performance levels in a fully probabilistic set-up (50% validity paradigm).
+These effects have also been reported in human participants performing equivalent tasks (for a
+review see [29]). In a further parallel to the human literature, we found the locus of the retro-
+cue benefit to lie within an increased probability of recalling the target item [30–37] and
+reduced probability of making swap or random errors [34]. However, we did not find a reliable
+increase in the target item recall precision on valid trials, which has been described in some
+human studies [31,34–37]. This discrepancy most likely reflects the training procedures fol-
+lowed, which lead to matching overall performance levels on valid trials in both the 75% and
+50% validity regimes.
+To our surprise, only networks trained with 100% valid retrocues were characterised by a par-
+allel Cued geometry in the post-cue delay interval. In contrast, networks trained under 75% and
+50 validity conditions continued to maintain the cued item information in orthogonal subspaces
+until the post-probe delay, when the planes were rotated into a shared subspace. This finding was
+particularly surprising in the case of the 75% validity condition, given that the presence of the
+behavioural effect described above strongly suggested that the networks relied on the retrocue
+input to solve the task. However, upon further investigation, we discovered differences in the
+amount of colour information (quantified by the CDI) between cued and uncued items for net-
+works trained under this condition. More specifically, in the post-cue delay, the CDI for the
+uncued item was significantly lower than for the cued item. This effect carried over into the post-
+probe delay, where the CDI was significantly higher for probed than unprobed items, with the
+magnitude of this difference significantly attenuated on invalidly cued trials. Most interestingly,
+the size of this validity effect on CDI predicted network performance in the 75% condition (in
+particular, the precision on the output estimated from the mixture model), providing an explana-
+tion for why the network showed the same retro-cueing benefit as humans.
+Overall, our findings are consistent with theories proposing that retrocues benefit perfor-
+mance partly by triggering a representational transformation into an action-optimised format
+[9]. We also find evidence for the attentional strengthening hypothesis of the retro-cueing
+effect [29]–in Experiment 1, we observed a selective increase in colour information for the
+cued item in the post-cue delay, in accordance with other observations from primate record-
+ings [10] and human neuroimaging [21,22]. In experiment 4, a similar effect was observed
+both when the retrocue input was deterministic (100% validity condition) as well as when it
+correctly pointed to the probed item on the majority of the trials (75% validity condition). On
+the other hand, our findings are inconsistent with accounts proposing the removal of uncued
+items post-cue [29]–in Experiment 1, we found that the post-cue delay was still characterised
+by significant information about the uncued item. The same result was reported in monkey
+LPFC [10]. On a broader scale, this work speaks to the utility of the representational geometry
+approach for revealing computational mechanism in both artificial and biological networks.
+As seen with regards to the Cued geometry, characterising the geometric structure of the stim-
+ulus representations and its transformations across different stages of processing permits infer-
+ences about the nature of the computations learnt by the network. Over and above that, this
+framework affords direct cross-modal comparisons within a context of a given paradigm, as
+well as can shed light on computational similarities across different task domains.
+Methods
+Model architecture
+Each recurrent neural network (RNN) consisted of an input, recurrent and output layer. The
+input layer consisted of 36 units in total. There were 2 binary units corresponding to the
+PLOS COMP UTATIONAL  BIOLOGY
+Control of working memo ry in a recurrent neural network
+PLOS Computationa l Biology | https:/ /doi.org/10.13 71/journal.p cbi.1011555 October 18, 2023 23 / 33
+
+--- Page 29 ---
+comparable with the first set of trained networks (7 cycles), as well as two novel delay lengths,
+chosen from within and outside the training range (4 and 10 cycles, respectively).
+Cross-temporal decoding. For each trial timepoint, we trained a set of 12 LDA classifiers
+to perform pairwise discriminations between colour categories using the population hidden
+activity vectors. Data was labelled according to the cued stimulus (labels corresponded to 4 col-
+our categories). Each set of classifiers was subsequently tested on an unseen subset of the data
+which included all trial timepoints. To assess the stability of memory maintenance dynamics
+for a given condition (fixed or variable delay), we computed the average off-diagonal delay
+cross-temporal decoding accuracy scores for all models and tested them against the chance
+decoding level (50%) with a one-sample t-test. To compare the stability of the delay code
+between models trained with fixed and variable delay lengths, we calculated the ratio between
+the off- and on-diagonal cross-temporal decoding accuracy scores from the two delays and
+compared this metric between the groups with an independent samples t-test.
+Experiment 4
+We modified the previously used trial structure by setting the length of the pre- and post-cue
+delay periods to 5 cycles, as well as including a location probe (1 cycle), and a third, final mem-
+ory delay of 5 cycles (post-probe delay). We designed 3 experimental conditions, defined by
+the proportion of trials on which the retro-cue and probe inputs matched: 100%, 75% and
+50%. As in Experiment 3, the models (N = 30 per condition) were not subject to any noise, and
+we stopped training once the loss (summed over all the validly cued trials in the last epoch)
+crossed the threshold of 0.0005. The training dataset included 512 unique trials and for each
+epoch, we drew a random subset on which the retro-cue and probe inputs were set to mis-
+match. To increase the statistical power of the multiple linear regression analysis, we increased
+the sample size to N = 100 networks for each group. The Cued, Uncued and Cued/Uncued AI
+values were calculated by following the same steps as outlined above for Experiment 1 except
+using the hidden activity data from the last timepoint of the post-probe delay. The dependent
+variable (total number of training epochs) was box-cox transformed (separately for each valid-
+ity condition) prior to being used in the multiple regression model.
+Behavioural analysis. We sampled network choices as previously described and then fit a
+3-component mixture model to the trial-wise choice data, separately for every model, using
+the Analogue Report Toolbox (https://www.paulba ys.com/toolbox/) in MATLAB version
+2020b (Mathworks). The model is fit using maximum likelihood estimation and is described
+by:
+pða
+rep orte d
+Þ ¼ ð1   pU   pNTÞ�
+K
+ða
+re port ed
+  a
+cue d
+Þ þ pU
+1
+2p
+þ pNT�
+K
+ða
+rep orte d
+  a
+unc ued
+Þ ð7:1Þ
+where pU stands for the probability of making random guesses, pNT describes the probability
+of misremembering the target location and ϕ
+K
+is a von Mises distribution function with zero
+mean and concentration parameter K. Probability of making the target response (pT) is the
+difference between 1 and the sum of pU and pNT. Thus, choices are modelled as arising from
+a mixture of target and non-target-guided components, as well as random guesses. The fit
+parameters (pT, pU, pNT and K) were compared between trials on which the retro-cue and
+probe inputs matched (valid) and mismatched (invalid trials), as well as across the experimen-
+tal conditions (100%, 75% and 50% retro-cue validity). To this effect, for each parameter, we
+used a 2x3 mixed model ANOVA, with a repeated measures factor of trial type, and a
+between-subject factor of experimental condition. In cases where the data did not satisfy the
+assumptions of the mixed model ANOVA, we used a combination of non-parametric tests
+PLOS COMP UTATIONAL  BIOLOGY
+Control of working memo ry in a recurrent neural network
+PLOS Computationa l Biology | https:/ /doi.org/10.13 71/journal.p cbi.1011555 October 18, 2023 29 / 33
+
+--- Page 30 ---
+instead. In such cases, to test the main effect of the repeated measures factor of trial type, we
+concatenated the data from the two validity conditions and assessed the difference between
+valid and invalid trials with a Wilcoxon signed-rank test. To test the main effect of the
+between-subject factor of validity condition, we averaged the data between the valid and
+invalid trials and compared it between the two validity conditions with a Mann-Whitney U-
+test. Lastly, to test for an interaction between the trial type and validity condition factors, we
+calculated the difference between the valid and invalid trials and compared it across the valid-
+ity conditions with a Mann-Whitney U-test.
+Software. All statistical analyses described were implemented in python using the scipy.
+stats package (version 1.7.1), with the exception of the ANOVA, multiple linear regression and
+Bayesian statistics analyses, which were performed in JASP (version 0.12.2). All networks were
+trained using the pytorch library (version 1.10.2).
+Supporting information
+S1 Note. Complementary analyses for networks from Experiment 1.
+(DOCX)
+S2 Note. Training speed comparison for networks trained under various post-cue mainte-
+nance pressure conditions.
+(DOCX)
+S3 Note. Rotated / unrotated Cued plane AI analysis for Experiment 3.
+(DOCX)
+S4 Note. Results of the ANOVA analyses of mixture model parameters fit to choice data
+from Experiment 4.
+(DOCX)
+S1 Fig. Training dynamics and neural geometry of networks from Experiment 1. A. Train-
+ing dynamics of the networks from Experiment 1. Training loss values across all epochs, col-
+ours correspond to individual networks. B. Upper: Raw (black) and smoothed (green) training
+loss plotted across epochs. Lower: The derivative of the smoothed loss with respect to time.
+Red dot in both panels corresponds to the local minimum chosen as the ‘mid-training plateau’
+timepoint (refer to the Methods section in the main text for details). Data from an example
+model. C. Results of a decoding analysis complementary to the CDI analysis reported in
+Fig 3H. Decoding accuracy (expressed as units of standard normal distribution, snd) for the
+pre-cue subspaces (averaged across both locations, black circles) and cued and uncued sub-
+spaces in the post-cue delay (blue triangles and green crosses, respectively). Bar height corre-
+sponds to the mean across all models. Significance and Bayes factor values correspond to the
+results of contrasts reported in the section below. D. Between-plane angles θ (rectified, panels
+on the left) and phase-alignment angles ψ (panels on the right) for the unrotated (triangles)
+and rotated (squares) planes. Individual models and population mean shown as transparent
+and opaque markers, respectively.
+(DOCX)
+S2 Fig. Training speed comparison for networks trained under various post-cue mainte-
+nance pressure conditions. A. Time to convergence (number of training epochs, y-axis) for
+models trained with different post-cue delay lengths (x-axis). Dots correspond to the means
+across models, error bars to SEM.
+(DOCX)
+PLOS COMP UTATIONAL  BIOLOGY
+Control of working memo ry in a recurrent neural network
+PLOS Computationa l Biology | https:/ /doi.org/10.13 71/journal.p cbi.1011555 October 18, 2023 30 / 33
+
+--- Page 31 ---
+S3 Fig. Networks trained with variable delay interval lengths show improved temporal gen-
+eralisation on the task but similar representational geometry as those trained with fixed
+delay lengths. A. Angular error density plots for the 3 different test conditions: datasets with
+the delay interval length used during training (trained), a previously not experienced delay
+length that fell within the training range (in-range), and a novel delay outside of the training
+range (out-of-range). First and second rows correspond to the data from the networks trained
+with a fixed delay and variable delay intervals, respectively. Datapoints correspond to M±SEM
+across all models, shown with the best von Mises fit (solid line). B.-C. Angles θ and ψ between
+the two Uncued and Cued/Uncued planes (averaged across the two retrocue locations) in the
+post-cue delay interval, respectively. Individual models shown in transparent, grand averages
+in opaque colours. D. AI for the unrotated (light grey) and rotated (dark grey) subspaces. Sig-
+nificance values correspond to the results of a paired t-test. E. Analogous plane angles θ and
+phase alignment angles ψ for the unrotated (triangles) and rotated (squares) planes. Values for
+individual models and grand averages shown as transparent and opaque markers, respectively.
+Note theta angles have been rectified.
+(DOCX)
+S4 Fig. Results of the regression analyses predicting the number of training epochs (after a
+box-cox transformation) from AI Cued, AI Cued/Uncued and AI Uncued (columns, left to
+right) in Experiment 4. Results of the regression analyses predicting the number of training
+epochs (after a box-cox transformation) from AI Cued, AI Cued/Uncued and AI Uncued (col-
+umns, left to right) in Experiment 4. Rows correspond to the three retrocue validity conditions
+examined (100, 75 and 50%, top to bottom). Data shown in grey dots, regression lines of best
+fit in red, 95% confidence interval for the slope in navy dashed lines.
+(DOCX)
+Acknowledgmen ts
+We wish to thank Michał Wo ´ jcik, Dante Wasmuht, Jake Stroud, Andrew Saxe and Paul
+Muhle-Karbe for useful discussions and comments on the manuscript.
+Author Contributions
+Conceptualization: Emilia P. Piwek, Mark G. Stokes.
+Formal analysis: Emilia P. Piwek.
+Funding acquisition: Mark G. Stokes, Christopher Summerfield.
+Investigation: Emilia P. Piwek.
+Software: Emilia P. Piwek.
+Supervision: Mark G. Stokes, Christopher Summerfield.
+Visualization: Emilia P. Piwek.
+Writing – original draft: Emilia P. Piwek, Christopher Summerfield.
+Writing – review & editing: Emilia P. Piwek, Mark G. Stokes, Christopher Summerfield.
+References
+1. Fuster JM. The Prefrontal Cortex—A n Update. Neuron. 2001; 30: 319–333. https:// doi.org/10.10 16/
+S0896-627 3(01)0028 5-9 PMID: 11394996
+PLOS COMP UTATIONAL  BIOLOGY
+Control of working memo ry in a recurrent neural network
+PLOS Computationa l Biology | https:/ /doi.org/10.13 71/journal.p cbi.1011555 October 18, 2023 31 / 33
+
+--- Page 32 ---
+2. Goldman-R akic PS. Cellular basis of working memo ry. Neuron. 1995; 14: 477–485. https:// doi.org/10.
+1016/0896-6 273(95)90 304-6 PMID: 7695894
+3. Durstewi tz D, Seamans JK, Sejnowski TJ. Neurocomp utational models of working memory. Nat Neu-
+rosci. 2000; 3: 1184–1191. https://doi.or g/10.1038/ 81460 PMID: 11127836
+4. Wang X-J. 50 years of mnem onic persistent activity: quo vadis? Trends in Neurosciences . 2021; 44:
+888–902. https:// doi.org/10.10 16/j.tins.20 21.09.00 1 PMID: 34654556
+5. Masse NY, Yang GR, Song HF, Wang XJ, Freedma n DJ. Circuit mechanism s for the maintena nce and
+manipul ation of information in working memory. Nat Neurosc i. 2019; 22: 1159–116 7. https://doi.or g/10.
+1038/s41 593-019-0 414-3 PMID: 31182866
+6. Orhan AE, Ma WJ. Efficient probabilistic inferenc e in generic neural networks trained with non-proba bi-
+listic feedback. Nat Commun. 2017; 8: 138. https://doi.or g/10.103 8/s41467 -017-0018 1-8 PMID:
+28743932
+7. Griffin IC, Nobre AC. Orienting Attention to Locations in Internal Representa tions. Journal of Cognitive
+Neuroscienc e. 2003; 15: 1176–1 194. https://doi.or g/10.116 2/0898929033 2259813 9 PMID: 14709235
+8. Schmidt BK, Vogel EK, Woodman GF, Luck SJ. Voluntary and automatic attentional control of visual
+working memory. Percept ion & Psych ophysics. 2002; 64: 754–763. https://doi.or g/10.375 8/
+BF03194742 PMID: 12201334
+9. Myers NE, Stokes MG, Nobre AC. Prioritizing Informatio n during Working Memory : Beyond Sustaine d
+Internal Attentio n. Trends in Cognitive Sciences. 2017; 21: 449–461. https:/ /doi.org/10.10 16/j.tics.2 017.
+03.010 PMID: 28454719
+10. Panichello MF, Buschman TJ. Shared mechanism s underlie the control of working memory and atten-
+tion. Nature. 2021; 592: 601–605. https://doi.or g/10.103 8/s41586 -021-0339 0-w PMID: 3379046 7
+11. Hajonide s JE, Nobre AC, van Ede F, Stokes MG. Decoding visual colour from scalp electroenc ephalog-
+raphy measurem ents. NeuroIma ge. 2021; 237: 118030 . https://doi.or g/10.1016/ j.neuroimage.2 021.
+118030 PMID: 338362 72
+12. Flesch T, Juechem s K, Dumbals ka T, Saxe A, Summerfi eld C. Rich and lazy learning of task represen-
+tations in brains and neural networks. bioRxiv . 2021.
+13. Libby A, Buschm an TJ. Rotational dynamic s reduce interfe rence between sensory and memory repre-
+sentations. Nat Neurosci. 2021; 24: 715–726. https://do i.org/10.1038 /s41593- 021-00821- 9 PMID:
+33821001
+14. Nieh EH, Schottdor f M, Freeman NW, Low RJ, Lewallen S, Koay SA, et al. Geome try of abstract
+learned knowledge in the hippoca mpus. Nature. 2021; 1–5. https://doi.or g/10.103 8/s41586 -021-0365 2-
+7 PMID: 341355 12
+15. Xie Y, Hu P, Li J, Chen J, Song W, Wang X-J, et al. Geomet ry of sequence working memory in macaque
+prefrontal cortex. Science. 2022; 375: 632–63 9. https://doi.or g/10.1126 /science.abm 0204 PMID:
+35143322
+16. Bernardi S, Benna MK, Rigotti M, Munuera J, Fusi S, Salzman CD. The Geometry of Abstraction in the
+Hippocam pus and Prefrontal Cortex. Cell. 2020; S009286742 031228 9. https://doi.or g/10.101 6/j.cell.
+2020.09. 031 PMID: 33058757
+17. Sheahan H, Luyckx F, Nelli S, Teupe C, Summerfi eld C. Neural state space alignment for magnitude
+generalizatio n in humans and recurrent networks. Neuron. 2021; 109: 1214–1 226.e8. https://doi.or g/
+10.1016/ j.neuron.202 1.02.004 PMID: 33626322
+18. Luyckx F, Nili H, Spitzer B, Summerfi eld C. Neural structure mapping in human probabilist ic reward
+learning. Elife. 2019;8. https://doi.or g/10.7554/ eLife.42816 PMID: 308437 89
+19. Remington ED, Narain D, Hossein i EA, Jazaye ri M. Flexible Sensor imotor Comput ations through Rapid
+Reconfigur ation of Cortical Dynami cs. Neuron. 2018; 98: 1005–1019. https://do i.org/10.1016 /j.neuron.
+2018.05. 020 PMID: 29879384
+20. Elsayed GF, Lara AH, Kaufman MT, Churchlan d MM, Cunningh am JP. Reorganiz ation between prepa-
+ratory and movem ent population response s in motor cortex. Nature Commun ications. 2016; 7: 13239.
+https://doi.or g/10.103 8/ncomms 13239 PMID: 2780734 5
+21. Ester EF, Nouri A, Rodrigu ez L. Retrospec tive Cues Mitigate Informatio n Loss in Human Cortex during
+Working Memory Storage. J Neurosc i. 2018; 38: 8538–8548. https://doi.or g/10.1523/ JNEUROSCI.
+1566-18.201 8 PMID: 30126971
+22. Sprague TC, Ester EF, Serenc es JT. Restoring Latent Visual Working Memory Representa tions in
+Human Cortex. Neuron. 2016; 91: 694–70 7. https://doi.or g/10.101 6/j.neuron.20 16.07.00 6 PMID:
+27497224
+23. Russin J, Zolfaghar M, Park SA, Boorman E, O’Reilly RC. A Neural Networ k Model of Continual Learn-
+ing with Cognitive Control. arXiv:220204 773 [cs, q-bio]. 2022 [cited 7 Mar 2022]. Available: http://arxiv .
+org/abs/2 202.04773 https://doi. org/10.1016/j .neurops ychologia. 2014.04.016 PMID: 37223441
+PLOS COMP UTATIONAL  BIOLOGY
+Control of working memo ry in a recurrent neural network
+PLOS Computationa l Biology | https:/ /doi.org/10.13 71/journal.p cbi.1011555 October 18, 2023 32 / 33
+
+--- Page 33 ---
+24. Orhan AE, Ma WJ. A diverse range of factors affect the nature of neural representatio ns underlying
+short-term memory. Nat Neurosci. 2019; 22: 275–283. https://doi.or g/10.103 8/s41593 -018-0314 -y
+PMID: 306647 67
+25. Inagaki HK, Fontolan L, Romani S, Svobod a K. Discrete attractor dynamic s underlies persistent activity
+in the frontal cortex. Nature. 2019; 566: 212–21 7. https://doi.or g/10.103 8/s41586-019- 0919-7 PMID:
+30728503
+26. Bays PM, Catalao RFG, Husain M. The precision of visual working memory is set by allocatio n of a
+shared resource . J Vis. 2009; 9: 7.1–11. https://doi.or g/10.1167/ 9.10.7 PMID: 1981078 8
+27. Flesch T, Juechem s K, Dumbals ka T, Saxe A, Summerfi eld C. Orthogona l represent ations for robust
+context-dep endent task perform ance in brains and neural networks . Neuron. 2022; 110: 1258–1270.
+e11. https://do i.org/10.1016 /j.neuron.2 022.01.005 PMID: 350854 92
+28. Flesch T, Balaguer J, Dekker R, Nili H, Summerfi eld C. Comparing continual task learning in minds and
+machines. Procee dings of the National Academy of Sciences. 2018; 115: E10313– E10322. https://doi.
+org/10.1073/ pnas.180075 5115 PMID: 30322916
+29. Souza AS, Oberauer K. In search of the focus of attention in working memory: 13 years of the retro-cue
+effect. Atten Percep t Psychophys . 2016; 78: 1839–186 0. https://doi.or g/10.3758/ s13414-016- 1108-5
+PMID: 270986 47
+30. Murray AM, Nobre AC, Clark IA, Cravo AM, Stokes MG. Attention restores discrete items to visual
+short-term memory. Psychol Sci. 2013; 24: 550–556. https://d oi.org/10.117 7/095679 7612457782
+PMID: 234367 86
+31. Williams M, Hong SW, Kang M-S, Carlisle NB, Woodman GF. The benefit of forgetti ng. Psychonom ic
+Bulletin & Review. 2013; 20: 348–355. https:// doi.org/10.37 58/s1342 3-012-035 4-3 PMID: 23208769
+32. Souza AS, Rerko L, Lin H-Y, Oberauer K. Focus ed attention improves working memory: implication s for
+flexible-reso urce and discrete-ca pacity models. Atten Percept Psycho phys. 2014; 76: 2080–2102.
+https://doi.or g/10.375 8/s13414 -014-0687-2 PMID: 24874258
+33. Souza AS, Rerko L, Oberauer K. Getting more from visual working memory : Retro-cue s enhance
+retrieval and protect from visual interference. Journal of Experime ntal Psychology: Human Percep tion
+and Performanc e. 2016; 42: 890–91 0. https://doi.or g/10.103 7/xhp00001 92 PMID: 26752731
+34. Gunseli E, van Moorselaar D, Meeter M, Olivers CNL. The reliability of retro-cues determines the fate of
+noncued visual working memory represent ations. Psychon Bull Rev. 2015; 22: 1334–1341. https:// doi.
+org/10.3758/ s13423-014- 0796-x PMID: 25563713
+35. Makovski T, Pertzov Y. Attention and memory protection: Interactio ns between retrospectiv e attention
+cueing and interference. The Quarterly Journal of Experimen tal Psychology. 2015; 68: 1735–1743.
+https://doi.or g/10.108 0/17470218.2 015.1049623 PMID: 259807 84
+36. van Moorsela ar D, Gunseli E, Theeuwes J, Olivers CNL. The time course of protectin g a visual memory
+representat ion from perceptu al interfe rence. Frontiers in Huma n Neuroscience. 2015;8. https://doi.or g/
+10.3389/ fnhum.201 4.01053 PMID: 256285 55
+37. Wallis G, Stokes M, Cousijn H, Woolrich M, Nobre AC. Frontoparie tal and Cingulo- opercular Networks
+Play Dissociab le Roles in Control of Working Memory. J Cogn Neurosc i. 2015; 27: 2019–2 034. https://
+doi.org/10.11 62/jocn_a_0083 8 PMID: 26042457
+38. Saxe AM, McClell and JL, Ganguli S. Exact solutions to the nonlin ear dynamics of learning in deep linear
+neural networks. arXiv; 2014 Feb. Report No.: arXiv:1312.61 20. https://doi.or g/10.48550/ arXiv.1312.
+6120
+PLOS COMP UTATIONAL  BIOLOGY
+Control of working memo ry in a recurrent neural network
+PLOS Computationa l Biology | https:/ /doi.org/10.13 71/journal.p cbi.1011555 October 18, 2023 33 / 33
