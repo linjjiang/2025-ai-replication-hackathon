@@ -35,14 +35,14 @@ def main(args):
     # -------------------------------
 
     dataset = RetrocueWMTask(path=f'{os.environ.get("DATA_PATH")}/dataset/experiment1.npy')
-    loader = DataLoader(dataset, batch_size = 512, shuffle = True, num_workers = 1, pin_memory = True)
+    loader = DataLoader(dataset, batch_size = 1, shuffle = True, num_workers = 1, pin_memory = True)
 
     # -------------------------------
     # Initializing model
     # -------------------------------
 
-    model = RNN(input_size=dataset.x.shape[-1], hidden_size=200, output_size=dataset.y.shape[-1])
-    model = GenericModel(model, loss = AngularLoss())
+    model = RNN(input_size=dataset.x.shape[-1], hidden_size=200, output_size=dataset.y.shape[-1], sigma = 0.07)
+    model = GenericModel(model, loss = AngularLoss(), optimizer = 'rmsprop', optimizer_params = {'lr': 0.0001})
 
     # -------------------------------
     # Saving model

@@ -42,7 +42,6 @@ def main(args):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description = 'Plotting Figure 4A')
     parser.add_argument('--seed', metavar = 'S', type = int, default = 0, help = 'Seed')
-    parser.add_argument('--epoch', metavar = 'E', type = int, default = 0, help = 'Epoch')
     parser.add_argument('--variant', metavar = 'V', type = str, default = '', help = 'Model variant')
     args = parser.parse_args()
     main(args)

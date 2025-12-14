@@ -9,7 +9,16 @@ class RNN(nn.Module):
         self.w = nn.Linear(hidden_size, hidden_size, bias=True)
         self.w_out = nn.Linear(hidden_size, output_size, bias=True)
         self.f = nn.ReLU()
+        self.f_out = nn.Softmax(dim=-1)
         self.return_hidden = return_hidden
+        self.reset_parameters()
+
+    def reset_parameters(self):
+        nn.init.orthogonal_(self.w.weight)
+        nn.init.xavier_uniform_(self.w_in.weight)
+        nn.init.xavier_uniform_(self.w.weight)
+        nn.init.zeros_(self.w.bias)
+        nn.init.zeros_(self.w_out.bias)
 
     def forward(self, x, h0=None):
         batch, time, _ = x.shape
@@ -22,4 +31,4 @@ class RNN(nn.Module):
             h = self.f(self.w_in(x[:, t]) + self.w(h) + noise)
             if self.return_hidden:
                 _h.append(h)
-        return (self.w_out(h), torch.stack(_h, dim = 1)) if self.return_hidden else self.w_out(h)
+        return (self.f_out(self.w_out(h)), torch.stack(_h, dim = 1)) if self.return_hidden else self.f_out(self.w_out(h))
