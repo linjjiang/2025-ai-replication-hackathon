@@ -7,18 +7,16 @@ def bump_representation(angle, n_color, kappa = torch.tensor(5.0)):
     phi = torch.linspace(-torch.pi, torch.pi, (n_color+1))[1:]
     return torch.exp(kappa * torch.cos(angle - phi))/(2*torch.pi * torch.special.i0(kappa))
 
-def onehot_representation(index, n, value):
-    return torch.zeros(n).scatter_(0, index, value)
-
 class RetrocueWMTask(Dataset):
-    def __init__(self, path, n_color = 17, n_location = 2, fixation = 0, stimulus = 1, pre_delay = 7, cue = 1, post_delay = 7):
+    def __init__(self, path, n_color = 17, n_location = 2, fixation = 0, stimulus = 1, pre_delay = 7, cue = 1, post_delay = 7, redo = False):
         self.fixation, self.stimulus, self.pre_delay, self.cue, self.post_delay = fixation, stimulus, pre_delay, cue, post_delay
         self.duration = self.fixation + self.stimulus + self.pre_delay + self.cue + self.post_delay
-        if os.path.isfile(path):
-            self.x, self.y, self.param = np.load(path)
+        if os.path.isfile(path) and not redo:
+            self.x, self.y, self.param = torch.load(path, weights_only=False)
         else:
             self.param = self.gen_param(n_color, n_location)
             self.x, self.y = self.generate_data(self.param, n_color, n_location)
+            torch.save((self.x, self.y, self.param), path)
 
     def gen_param(self, n_color, n_location):
         param = {}

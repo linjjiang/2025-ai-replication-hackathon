@@ -34,7 +34,7 @@ def main(args):
     # Training/Test dataset
     # -------------------------------
 
-    dataset = RetrocueWMTask(path=f'{os.environ.get("DATA_PATH")}/dataset/experiment1.npy')
+    dataset = RetrocueWMTask(path=f'{os.environ.get("DATA_PATH")}/dataset/experiment1.pt')
     loader = DataLoader(dataset, batch_size = 512, shuffle = True, num_workers = 1, pin_memory = True)
 
     # -------------------------------

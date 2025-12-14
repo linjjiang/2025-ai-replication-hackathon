@@ -1,15 +1,17 @@
 import os
+import argparse
 import torch
 import numpy as np
 import matplotlib.pyplot as plt
 
-def main():
+def main(args):
 
     # -------------------------------
     # Parameters
     # -------------------------------
 
-    model_name = f'RNN_seed0'
+    ext = f'_{args.variant}' if args.variant else ''
+    model_name = f'RNN_seed{args.seed}{ext}'
 
     # -------------------------------
     # Paths where to load/save data
@@ -18,13 +20,13 @@ def main():
 	# path where loss are saved
     model_path = f'{os.environ.get("DATA_PATH")}/model/experiment1/{model_name}'
     # path where figures are saved
-    figure_path = f'{os.environ.get("FIG_PATH")}/1_figure4a.png'
+    figure_path = f'{os.environ.get("FIG_PATH")}/1_figure4a{ext}.png'
 
     # -------------------------------
     # Prepare data
     # -------------------------------
 
-    train_loss = torch.load(f'{model_path}/train_loss.npy')
+    train_loss = torch.load(f'{model_path}/train_loss.npy', weights_only=True)
 
     # -------------------------------
     # Display
@@ -37,6 +39,11 @@ def main():
     ax.set_ylabel('Loss')
     plt.savefig(figure_path)
 
-if __name__ == "__main__":
-    main()
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description = 'Plotting Figure 4A')
+    parser.add_argument('--seed', metavar = 'S', type = int, default = 0, help = 'Seed')
+    parser.add_argument('--epoch', metavar = 'E', type = int, default = 0, help = 'Epoch')
+    parser.add_argument('--variant', metavar = 'V', type = str, default = '', help = 'Model variant')
+    args = parser.parse_args()
+    main(args)
 
